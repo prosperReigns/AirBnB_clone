@@ -8,12 +8,34 @@ from datetime import datetime
 class BaseModel:
     """the base of a model"""
 
-    instance_count = 0
-
     def __init__(self, *args, **kwargs):
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        """instantiate the instance of a class
+
+        Args:
+            name: the name of the model
+            number: model number
+            id: the id of the model
+            created_at: time model was created
+            updated_at: time model was modified
+        """
+        if kwargs:
+            time_format = "%Y-%m-%dT%H:%M:%S.%f"
+            created_at_dict = kwargs['created_at']
+            kwargs['created_at'] = \
+                datetime.strptime(created_at_dict, time_format)
+            updated_at_dict = kwargs['updated_at']
+            kwargs['updated_at'] = \
+                datetime.strptime(updated_at_dict, time_format)
+
+            for k, v in kwargs.items():
+                if k == "__class__":
+                    continue
+                else:
+                    setattr(self, k, v)
+            else:
+                self.id = str(uuid4())
+                self.created_at = datetime.now()
+                self.updated_at = datetime.now()
 
     def __str__(self):
         """print a string representaion of Base model"""
