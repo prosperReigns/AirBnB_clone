@@ -17,7 +17,7 @@ class FileStorage:
 
     def all(self):
         """all the object in file storage"""
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """creates a new object
@@ -27,23 +27,23 @@ class FileStorage:
         """
         obj_name = obj.__class__.__name__
         value = "{}.{}".format(obj_name, obj.id)
-        FileStorage.__objects[value] = obj
+        self.__objects[value] = obj
 
     def save(self):
         """serialize json file"""
-        all_objects = FileStorage.__objects
+        all_objects = self.__objects
         object_dict = {}
 
         for key in all_objects.keys():
             object_dict[key] = all_objects[key].to_dict()
 
-        with open(FileStorage.__file_path, 'w', encoding="utf-8") as file:
+        with open(self.__file_path, 'w', encoding="utf-8") as file:
             json.dump(object_dict, file)
 
     def reload(self):
         """deserialize json file"""
-        if os.path.exists(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r') as file:
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, 'r') as file:
                 try:
                     object_dict = json.load(file)
                     for key, value in object_dict.items():
@@ -52,6 +52,6 @@ class FileStorage:
                         cls = eval(class_name)
                         instance = cls(**value)
 
-                        FileStorage.__objects[key] = instance
+                        self.__objects[key] = instance
                 except Exception:
                     pass
