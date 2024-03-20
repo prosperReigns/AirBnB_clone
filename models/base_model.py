@@ -32,11 +32,18 @@ class BaseModel:
                     continue
                 else:
                     setattr(self, k, v)
+<<<<<<< HEAD
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             models.storage.new(self)
+=======
+            else:
+                self.id = str(uuid4())
+                self.created_at = datetime.now()
+                self.updated_at = datetime.now()
+>>>>>>> f430b452d9bfea78f6a5491a477896a5a3536077
 
     def __str__(self):
         """print a string representaion of Base model"""
